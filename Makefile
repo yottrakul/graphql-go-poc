@@ -16,11 +16,28 @@ install:
 	go mod tidy
 	go mod download
 
+# Fetch schema from GraphQL server using npx
+fetch-schema:
+	@echo "🔍 Fetching schema from GraphQL server..."
+	@echo "Make sure GraphQL server is running on http://localhost:4000/graphql"
+	npx get-graphql-schema http://localhost:4000/graphql > schema.graphql
+	@echo "✅ Schema saved to schema.graphql"
+
+# Alternative: Fetch schema using custom Node.js script
+fetch-schema-custom:
+	@echo "🔍 Fetching schema from GraphQL server (custom script)..."
+	@echo "Make sure GraphQL server is running on http://localhost:4000/graphql"
+	node fetch-schema.js http://localhost:4000/graphql
+
 # Generate genqlient code
 generate:
 	@echo "🔧 Generating genqlient code..."
 	@echo "Make sure GraphQL server is running on http://localhost:4000/graphql"
 	go run github.com/Khan/genqlient
+
+# Fetch schema and generate code in one command
+generate-from-server: fetch-schema generate
+	@echo "✅ Schema fetched and code generated successfully!"
 
 # Start GraphQL server in Docker
 run-graphql:
